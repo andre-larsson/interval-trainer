@@ -194,7 +194,6 @@ function answer(guess) {
 $("startGame").addEventListener("click", () => {
   setupView.classList.add("hidden");
   gameView.classList.remove("hidden");
-  buildIntervalCheckboxes();
   buildAnswerButtons(getPool());
 });
 
@@ -214,3 +213,5 @@ exitGameBtn.addEventListener("click", () => {
   gameView.classList.add("hidden");
   setupView.classList.remove("hidden");
 });
+
+buildIntervalCheckboxes();
