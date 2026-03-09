@@ -30,6 +30,8 @@ const exitGameBtn = $("exitGame");
 const instrumentSetupEl = $("instrument");
 const instrumentGameEl = $("instrumentGame");
 
+const DEFAULT_INTERVALS = new Set([0, 7, 12]); // prim, kvint, oktav
+
 let audioCtx;
 let currentQuestion = null;
 let score = 0;
@@ -81,7 +83,7 @@ function buildIntervalCheckboxes() {
     input.type = "checkbox";
     input.name = "interval-filter";
     input.value = interval.semitones;
-    input.checked = true;
+    input.checked = DEFAULT_INTERVALS.has(interval.semitones);
     input.addEventListener("change", () => {
       const selected = getSelectedSemitones();
       if (selected.length === 0) {
