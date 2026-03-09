@@ -192,11 +192,11 @@ function startRound() {
   solved = false;
 
   buildAnswerButtons(pool);
-  statusEl.textContent = "Lyssna och gissa. Du går vidare först när du svarat rätt.";
+  statusEl.textContent = "Lyssna och välj rätt intervall för att gå vidare.";
   playMelodicBtn.disabled = false;
   playHarmonicBtn.disabled = false;
   nextRoundBtn.disabled = true;
-  nextRoundBtn.textContent = "Nästa runda (låst tills rätt svar)";
+  nextRoundBtn.textContent = "Nästa runda";
 
   updateStats();
   playInterval(currentQuestion, "melodic");
@@ -220,7 +220,7 @@ function answer(guess) {
       statusEl.innerHTML = `✅ <span class="ok">Rätt!</span> ${correctLabel}. +1 poäng.`;
     } else {
       streak = 0;
-      statusEl.innerHTML = `✅ <span class="ok">Rätt till slut!</span> ${correctLabel}. 0 poäng denna runda (första gissningen var fel).`;
+      statusEl.innerHTML = `✅ <span class="ok">Rätt!</span> ${correctLabel}. 0 poäng denna runda (första gissningen var fel).`;
     }
   } else {
     if (attempts === 1) firstGuessWrong = true;
