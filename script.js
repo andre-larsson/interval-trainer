@@ -31,6 +31,8 @@ const instrumentSetupEl = $("instrument");
 const instrumentGameEl = $("instrumentGame");
 const directionSetupEl = $("directionSetup");
 const directionGameEl = $("directionGame");
+const rootModeSetupEl = $("rootModeSetup");
+const rootModeGameEl = $("rootModeGame");
 const soundInfoEl = $("soundInfo");
 
 const DEFAULT_INTERVALS = new Set([0, 7, 12]); // prim, kvint, oktav
@@ -193,9 +195,13 @@ function startRound() {
   const directionSetting = directionGameEl.value;
   const melodicDirection = directionSetting === "both" ? randomItem(["up", "down"]) : directionSetting;
 
+  const rootPoolFree = [45, 47, 48, 50, 52, 53, 55, 57, 59, 60, 62, 64, 65, 67, 69, 71, 72];
+  const rootPoolC = [48, 60, 72]; // C3, C4, C5
+  const rootMode = rootModeGameEl.value;
+
   currentQuestion = {
     interval: picked.semitones,
-    root: randomItem([57, 59, 60, 62, 64, 65]),
+    root: randomItem(rootMode === "c" ? rootPoolC : rootPoolFree),
     melodicDirection
   };
 
@@ -262,6 +268,7 @@ $("startGame").addEventListener("click", () => {
 
   syncInstrument(instrumentSetupEl, instrumentGameEl);
   syncInstrument(directionSetupEl, directionGameEl);
+  syncInstrument(rootModeSetupEl, rootModeGameEl);
   setupView.classList.add("hidden");
   gameView.classList.remove("hidden");
   startRound();
@@ -285,6 +292,15 @@ directionGameEl.addEventListener("change", () => {
   syncInstrument(directionGameEl, directionSetupEl);
 });
 
+rootModeSetupEl.addEventListener("change", () => {
+  if (gameView.classList.contains("hidden")) return;
+  syncInstrument(rootModeSetupEl, rootModeGameEl);
+});
+
+rootModeGameEl.addEventListener("change", () => {
+  syncInstrument(rootModeGameEl, rootModeSetupEl);
+});
+
 nextRoundBtn.addEventListener("click", startRound);
 playMelodicBtn.addEventListener("click", () => currentQuestion && playInterval(currentQuestion, "melodic"));
 playHarmonicBtn.addEventListener("click", () => currentQuestion && playInterval(currentQuestion, "harmonic"));
@@ -302,5 +318,6 @@ exitGameBtn.addEventListener("click", () => {
 instrumentGameEl.innerHTML = instrumentSetupEl.innerHTML;
 syncInstrument(instrumentSetupEl, instrumentGameEl);
 syncInstrument(directionSetupEl, directionGameEl);
+syncInstrument(rootModeSetupEl, rootModeGameEl);
 buildIntervalCheckboxes();
 updateStats();
