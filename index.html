@@ -16,10 +16,14 @@
           <label>
             Ljud (inställning)
             <select id="instrument">
-              <option value="sine">Ren ton (sine)</option>
-              <option value="triangle" selected>Mjuk synth (triangle)</option>
-              <option value="square">Klar synth (square)</option>
-              <option value="sawtooth">Bright synth (sawtooth)</option>
+              <option value="triangle" selected>Mjuk synth</option>
+              <option value="sine">Ren ton</option>
+              <option value="square">Klar synth</option>
+              <option value="sawtooth">Bright synth</option>
+              <option value="flute">Flöjt</option>
+              <option value="organ">Orgel</option>
+              <option value="bell">Klocka</option>
+              <option value="warmpad">Varm pad</option>
             </select>
           </label>
 
@@ -61,7 +65,6 @@
         </section>
 
         <section class="actions">
-          <button id="nextRound">Starta första runda</button>
           <button id="playMelodic" disabled>Spela melodi</button>
           <button id="playHarmonic" disabled>Spela harmoni</button>
         </section>
@@ -72,6 +75,10 @@
 
         <section class="answers" id="answers"></section>
 
+        <section class="round-cta">
+          <button id="nextRound">Nästa runda (låst tills rätt svar)</button>
+        </section>
+
         <section class="scoreboard">
           <div>Poäng: <span id="score">0</span></div>
           <div>Streak: <span id="streak">0</span></div>
@@ -81,6 +88,6 @@
       </section>
     </main>
 
-    <script src="script.js?v=20260310-4"></script>
+    <script src="script.js?v=20260310-5"></script>
   </body>
 </html>

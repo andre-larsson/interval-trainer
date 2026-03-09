@@ -115,23 +115,35 @@ function buildAnswerButtons(pool) {
   });
 }
 
-function envelope(gainNode, when, dur, peak = 0.18) {
+const SOUND_PRESETS = {
+  sine: { type: "sine", attack: 0.02, peak: 0.18, tail: 0.03 },
+  triangle: { type: "triangle", attack: 0.02, peak: 0.18, tail: 0.03 },
+  square: { type: "square", attack: 0.01, peak: 0.14, tail: 0.02 },
+  sawtooth: { type: "sawtooth", attack: 0.01, peak: 0.12, tail: 0.02 },
+  flute: { type: "sine", attack: 0.05, peak: 0.2, tail: 0.04 },
+  organ: { type: "square", attack: 0.01, peak: 0.09, tail: 0.04 },
+  bell: { type: "triangle", attack: 0.004, peak: 0.26, tail: 0.18 },
+  warmpad: { type: "triangle", attack: 0.09, peak: 0.16, tail: 0.08 }
+};
+
+function envelope(gainNode, when, dur, attack = 0.02, peak = 0.18) {
   gainNode.gain.setValueAtTime(0.0001, when);
-  gainNode.gain.exponentialRampToValueAtTime(peak, when + 0.02);
+  gainNode.gain.exponentialRampToValueAtTime(peak, when + attack);
   gainNode.gain.exponentialRampToValueAtTime(0.0001, when + dur);
 }
 
-function playTone(freq, start, dur, type) {
+function playTone(freq, start, dur, presetName) {
+  const preset = SOUND_PRESETS[presetName] || SOUND_PRESETS.triangle;
   const osc = audioCtx.createOscillator();
   const gain = audioCtx.createGain();
 
-  osc.type = type;
+  osc.type = preset.type;
   osc.frequency.setValueAtTime(freq, start);
 
-  envelope(gain, start, dur);
+  envelope(gain, start, dur, preset.attack, preset.peak);
   osc.connect(gain).connect(audioCtx.destination);
   osc.start(start);
-  osc.stop(start + dur + 0.03);
+  osc.stop(start + dur + (preset.tail ?? 0.03));
 }
 
 function playInterval(question, mode) {
