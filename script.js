@@ -15,6 +15,8 @@ const INTERVALS = [
 ];
 
 const $ = (id) => document.getElementById(id);
+const setupView = $("setupView");
+const gameView = $("gameView");
 const statusEl = $("status");
 const answersEl = $("answers");
 const playMelodicBtn = $("playMelodic");
@@ -22,11 +24,15 @@ const playHarmonicBtn = $("playHarmonic");
 const scoreEl = $("score");
 const streakEl = $("streak");
 const checkboxContainer = $("intervalCheckboxes");
+const nextRoundBtn = $("nextRound");
 
 let audioCtx;
 let currentQuestion = null;
 let score = 0;
 let streak = 0;
+let attempts = 0;
+let firstGuessWrong = false;
+let solved = false;
 
 function ensureAudio() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -60,6 +66,7 @@ function buildIntervalCheckboxes() {
     input.type = "checkbox";
     input.name = "interval-filter";
     input.value = interval.semitones;
+    input.checked = true;
     input.addEventListener("change", () => {
       const selected = getSelectedSemitones();
       if (selected.length === 0) {
@@ -76,10 +83,6 @@ function buildIntervalCheckboxes() {
     label.appendChild(input);
     label.appendChild(text);
     checkboxContainer.appendChild(label);
-  });
-
-  document.querySelectorAll('input[name="interval-filter"]').forEach((cb) => {
-    cb.checked = true;
   });
 }
 
@@ -130,7 +133,7 @@ function playInterval(question, mode) {
   }
 }
 
-function newQuestion() {
+function startRound() {
   const pool = getPool();
   if (!pool.length) {
     statusEl.innerHTML = '⚠️ <span class="bad">Välj minst ett intervall.</span>';
@@ -143,45 +146,65 @@ function newQuestion() {
     root: randomItem([57, 59, 60, 62, 64, 65])
   };
 
+  attempts = 0;
+  firstGuessWrong = false;
+  solved = false;
+
   buildAnswerButtons(pool);
-  statusEl.textContent = "Lyssna och välj rätt intervall.";
-  statusEl.className = "";
+  statusEl.textContent = "Lyssna och gissa. Du går vidare först när du svarat rätt.";
   playMelodicBtn.disabled = false;
   playHarmonicBtn.disabled = false;
+  nextRoundBtn.disabled = true;
+  nextRoundBtn.textContent = "Nästa runda (låst tills rätt svar)";
 
   playInterval(currentQuestion, "melodic");
 }
 
 function answer(guess) {
-  if (!currentQuestion) return;
+  if (!currentQuestion || solved) return;
 
+  attempts += 1;
   const correct = guess === currentQuestion.interval;
   const correctName = INTERVALS.find((i) => i.semitones === currentQuestion.interval)?.name;
 
   if (correct) {
-    score += 1;
-    streak += 1;
-    statusEl.innerHTML = `✅ <span class="ok">Rätt!</span> Det var <strong>${correctName}</strong>.`;
+    solved = true;
+    nextRoundBtn.disabled = false;
+    nextRoundBtn.textContent = "Nästa runda";
+
+    if (!firstGuessWrong) {
+      score += 1;
+      streak += 1;
+      statusEl.innerHTML = `✅ <span class="ok">Rätt!</span> ${correctName}. +1 poäng.`;
+    } else {
+      streak = 0;
+      statusEl.innerHTML = `✅ <span class="ok">Rätt till slut!</span> ${correctName}. 0 poäng denna runda (första gissningen var fel).`;
+    }
   } else {
+    if (attempts === 1) firstGuessWrong = true;
     streak = 0;
-    statusEl.innerHTML = `❌ <span class="bad">Inte riktigt.</span> Rätt svar var <strong>${correctName}</strong>.`;
+    statusEl.innerHTML = `❌ <span class="bad">Fel.</span> Lyssna igen och försök igen — du behöver rätt svar för att gå vidare.`;
   }
 
   scoreEl.textContent = score;
   streakEl.textContent = streak;
 }
 
-$("newQuestion").addEventListener("click", newQuestion);
+$("startGame").addEventListener("click", () => {
+  setupView.classList.add("hidden");
+  gameView.classList.remove("hidden");
+  buildIntervalCheckboxes();
+  buildAnswerButtons(getPool());
+});
+
+nextRoundBtn.addEventListener("click", startRound);
 playMelodicBtn.addEventListener("click", () => currentQuestion && playInterval(currentQuestion, "melodic"));
 playHarmonicBtn.addEventListener("click", () => currentQuestion && playInterval(currentQuestion, "harmonic"));
+
 $("resetScore").addEventListener("click", () => {
   score = 0;
   streak = 0;
   scoreEl.textContent = "0";
   streakEl.textContent = "0";
-  statusEl.textContent = "Poäng nollställd. Kör en ny intervall!";
-  statusEl.className = "";
+  statusEl.textContent = "Poäng nollställd.";
 });
-
-buildIntervalCheckboxes();
-buildAnswerButtons(getPool());

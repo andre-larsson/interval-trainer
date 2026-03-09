@@ -8,42 +8,49 @@
   </head>
   <body>
     <main class="app">
-      <h1>🎵 Intervalltränare</h1>
-      <p class="subtitle">Öva intervall som <strong>melodi</strong> eller <strong>harmoni</strong>.</p>
-
-      <section class="controls">
-        <label>
-          Ljud
-          <select id="instrument">
-            <option value="sine">Ren ton (sine)</option>
-            <option value="triangle" selected>Mjuk synth (triangle)</option>
-            <option value="square">Klar synth (square)</option>
-            <option value="sawtooth">Bright synth (sawtooth)</option>
-          </select>
-        </label>
+      <section id="setupView">
+        <h1>🎵 Intervalltränare</h1>
+        <p class="subtitle">Öva gehör med tydliga rundor och fokus på rätt svar.</p>
+        <button id="startGame">Starta spelet</button>
       </section>
 
-      <section class="interval-picker">
-        <p>Välj intervall som ska vara med:</p>
-        <div id="intervalCheckboxes" class="checkbox-grid"></div>
-      </section>
+      <section id="gameView" class="hidden">
+        <h1>🎵 Intervalltränare</h1>
 
-      <section class="actions">
-        <button id="newQuestion">Ny intervall</button>
-        <button id="playMelodic" disabled>Spela melodi</button>
-        <button id="playHarmonic" disabled>Spela harmoni</button>
-      </section>
+        <section class="controls">
+          <label>
+            Ljud
+            <select id="instrument">
+              <option value="sine">Ren ton (sine)</option>
+              <option value="triangle" selected>Mjuk synth (triangle)</option>
+              <option value="square">Klar synth (square)</option>
+              <option value="sawtooth">Bright synth (sawtooth)</option>
+            </select>
+          </label>
+        </section>
 
-      <section>
-        <p id="status">Tryck på <strong>Ny intervall</strong> för att börja.</p>
-      </section>
+        <section class="interval-picker">
+          <p>Välj intervall som ska vara med:</p>
+          <div id="intervalCheckboxes" class="checkbox-grid"></div>
+        </section>
 
-      <section class="answers" id="answers"></section>
+        <section class="actions">
+          <button id="nextRound">Starta första runda</button>
+          <button id="playMelodic" disabled>Spela melodi</button>
+          <button id="playHarmonic" disabled>Spela harmoni</button>
+        </section>
 
-      <section class="scoreboard">
-        <div>Poäng: <span id="score">0</span></div>
-        <div>Streak: <span id="streak">0</span></div>
-        <button id="resetScore" class="ghost">Nollställ</button>
+        <section>
+          <p id="status">Starta en runda för att börja.</p>
+        </section>
+
+        <section class="answers" id="answers"></section>
+
+        <section class="scoreboard">
+          <div>Poäng: <span id="score">0</span></div>
+          <div>Streak: <span id="streak">0</span></div>
+          <button id="resetScore" class="ghost">Nollställ</button>
+        </section>
       </section>
     </main>
 
