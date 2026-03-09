@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Intervalltränare</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <h1>🎵 Intervalltränare</h1>
+      <p class="subtitle">Öva intervall som <strong>melodi</strong> eller <strong>harmoni</strong>.</p>
+
+      <section class="controls">
+        <label>
+          Svårighetsgrad
+          <select id="difficulty">
+            <option value="easy">Lätt (prim–kvint)</option>
+            <option value="medium" selected>Medel (prim–oktav)</option>
+            <option value="hard">Svår (alla upp till oktav)</option>
+          </select>
+        </label>
+
+        <label>
+          Läge
+          <select id="mode">
+            <option value="melodic" selected>Melodi (en ton i taget)</option>
+            <option value="harmonic">Harmoni (samtidigt)</option>
+          </select>
+        </label>
+
+        <label>
+          Ljud
+          <select id="instrument">
+            <option value="sine">Ren ton (sine)</option>
+            <option value="triangle" selected>Mjuk synth (triangle)</option>
+            <option value="square">Klar synth (square)</option>
+            <option value="sawtooth">Bright synth (sawtooth)</option>
+          </select>
+        </label>
+      </section>
+
+      <section class="actions">
+        <button id="newQuestion">Ny intervall</button>
+        <button id="replay" disabled>Spela igen</button>
+      </section>
+
+      <section>
+        <p id="status">Tryck på <strong>Ny intervall</strong> för att börja.</p>
+      </section>
+
+      <section class="answers" id="answers"></section>
+
+      <section class="scoreboard">
+        <div>Poäng: <span id="score">0</span></div>
+        <div>Streak: <span id="streak">0</span></div>
+        <button id="resetScore" class="ghost">Nollställ</button>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
