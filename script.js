@@ -249,6 +249,11 @@ function answer(guess) {
 }
 
 $("startGame").addEventListener("click", () => {
+  score = 0;
+  streak = 0;
+  rounds = 0;
+  updateStats();
+
   syncInstrument(instrumentSetupEl, instrumentGameEl);
   syncInstrument(directionSetupEl, directionGameEl);
   setupView.classList.add("hidden");
@@ -279,6 +284,11 @@ playMelodicBtn.addEventListener("click", () => currentQuestion && playInterval(c
 playHarmonicBtn.addEventListener("click", () => currentQuestion && playInterval(currentQuestion, "harmonic"));
 
 exitGameBtn.addEventListener("click", () => {
+  score = 0;
+  streak = 0;
+  rounds = 0;
+  updateStats();
+
   gameView.classList.add("hidden");
   setupView.classList.remove("hidden");
 });
