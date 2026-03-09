@@ -23,7 +23,8 @@ const DIFFICULTIES = {
 const $ = (id) => document.getElementById(id);
 const statusEl = $("status");
 const answersEl = $("answers");
-const replayBtn = $("replay");
+const playMelodicBtn = $("playMelodic");
+const playHarmonicBtn = $("playHarmonic");
 const scoreEl = $("score");
 const streakEl = $("streak");
 
@@ -79,7 +80,7 @@ function playTone(freq, start, dur, type) {
   osc.stop(start + dur + 0.03);
 }
 
-function playInterval(question) {
+function playInterval(question, mode) {
   ensureAudio();
 
   const type = $("instrument").value;
@@ -88,7 +89,7 @@ function playInterval(question) {
   const rootFreq = midiToFreq(question.root);
   const upperFreq = midiToFreq(question.root + question.interval);
 
-  if (question.mode === "melodic") {
+  if (mode === "melodic") {
     playTone(rootFreq, now, 0.55, type);
     playTone(upperFreq, now + 0.72, 0.55, type);
   } else {
@@ -100,20 +101,18 @@ function playInterval(question) {
 function newQuestion() {
   const pool = getPool();
   const picked = randomItem(pool);
-  const mode = $("mode").value;
-
   currentQuestion = {
     interval: picked.semitones,
-    root: randomItem([57, 59, 60, 62, 64, 65]), // A3, B3, C4, D4, E4, F4
-    mode
+    root: randomItem([57, 59, 60, 62, 64, 65]) // A3, B3, C4, D4, E4, F4
   };
 
   buildAnswerButtons(pool);
   statusEl.textContent = "Lyssna och välj rätt intervall.";
   statusEl.className = "";
-  replayBtn.disabled = false;
+  playMelodicBtn.disabled = false;
+  playHarmonicBtn.disabled = false;
 
-  playInterval(currentQuestion);
+  playInterval(currentQuestion, "melodic");
 }
 
 function answer(guess) {
@@ -136,7 +135,8 @@ function answer(guess) {
 }
 
 $("newQuestion").addEventListener("click", newQuestion);
-replayBtn.addEventListener("click", () => currentQuestion && playInterval(currentQuestion));
+playMelodicBtn.addEventListener("click", () => currentQuestion && playInterval(currentQuestion, "melodic"));
+playHarmonicBtn.addEventListener("click", () => currentQuestion && playInterval(currentQuestion, "harmonic"));
 $("resetScore").addEventListener("click", () => {
   score = 0;
   streak = 0;
