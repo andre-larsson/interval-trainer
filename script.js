@@ -112,11 +112,16 @@ function buildIntervalCheckboxes() {
   });
 }
 
+function clearSelectedAnswer() {
+  answersEl.querySelectorAll("button").forEach((btn) => btn.classList.remove("selected-answer"));
+}
+
 function buildAnswerButtons(pool) {
   answersEl.innerHTML = "";
   pool.forEach((interval) => {
     const btn = document.createElement("button");
     btn.textContent = interval.label;
+    btn.dataset.semitones = String(interval.semitones);
     btn.onclick = () => answer(interval.semitones);
     answersEl.appendChild(btn);
   });
@@ -199,6 +204,7 @@ function startRound() {
   solved = false;
 
   buildAnswerButtons(pool);
+  clearSelectedAnswer();
   statusEl.textContent = "Lyssna och välj rätt intervall för att gå vidare.";
   playMelodicBtn.disabled = false;
   playHarmonicBtn.disabled = false;
@@ -211,6 +217,10 @@ function startRound() {
 
 function answer(guess) {
   if (!currentQuestion || solved) return;
+
+  clearSelectedAnswer();
+  const selectedBtn = answersEl.querySelector(`button[data-semitones="${guess}"]`);
+  if (selectedBtn) selectedBtn.classList.add("selected-answer");
 
   attempts += 1;
   const correct = guess === currentQuestion.interval;

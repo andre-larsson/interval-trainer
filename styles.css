@@ -158,6 +158,14 @@ button:disabled { opacity: .5; cursor: not-allowed; }
   padding: 12px;
 }
 
+.answers button.selected-answer {
+  background: linear-gradient(180deg, #ffd58a, #ffb84d);
+  color: #2a1200;
+  border-color: #ff9d1f;
+  box-shadow: 0 8px 16px rgba(255, 157, 31, .35);
+  font-weight: 800;
+}
+
 .scoreboard {
   margin-top: 18px;
   display: flex;
