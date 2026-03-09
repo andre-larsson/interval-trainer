@@ -14,12 +14,6 @@ const INTERVALS = [
   { semitones: 12, name: "Oktav" }
 ];
 
-const DIFFICULTIES = {
-  easy: [0, 3, 4, 5, 7],
-  medium: [0, 2, 3, 4, 5, 7, 9, 12],
-  hard: INTERVALS.map((i) => i.semitones)
-};
-
 const $ = (id) => document.getElementById(id);
 const statusEl = $("status");
 const answersEl = $("answers");
@@ -28,7 +22,6 @@ const playHarmonicBtn = $("playHarmonic");
 const scoreEl = $("score");
 const streakEl = $("streak");
 const checkboxContainer = $("intervalCheckboxes");
-const difficultyEl = $("difficulty");
 
 let audioCtx;
 let currentQuestion = null;
@@ -58,25 +51,6 @@ function getPool() {
   return INTERVALS.filter((i) => selected.includes(i.semitones));
 }
 
-function syncDifficultyToCheckboxes() {
-  const selected = new Set(getSelectedSemitones());
-  const selectedSorted = [...selected].sort((a, b) => a - b);
-
-  for (const [key, arr] of Object.entries(DIFFICULTIES)) {
-    if (arr.length === selectedSorted.length && arr.every((v, idx) => v === selectedSorted[idx])) {
-      difficultyEl.value = key;
-      return;
-    }
-  }
-}
-
-function setCheckboxesFromDifficulty(level) {
-  const allowed = new Set(DIFFICULTIES[level]);
-  document.querySelectorAll('input[name="interval-filter"]').forEach((cb) => {
-    cb.checked = allowed.has(Number(cb.value));
-  });
-}
-
 function buildIntervalCheckboxes() {
   checkboxContainer.innerHTML = "";
 
@@ -93,7 +67,6 @@ function buildIntervalCheckboxes() {
         statusEl.innerHTML = '⚠️ <span class="bad">Välj minst ett intervall.</span>';
         return;
       }
-      syncDifficultyToCheckboxes();
       buildAnswerButtons(getPool());
     });
 
@@ -105,7 +78,9 @@ function buildIntervalCheckboxes() {
     checkboxContainer.appendChild(label);
   });
 
-  setCheckboxesFromDifficulty(difficultyEl.value);
+  document.querySelectorAll('input[name="interval-filter"]').forEach((cb) => {
+    cb.checked = true;
+  });
 }
 
 function buildAnswerButtons(pool) {
@@ -206,11 +181,6 @@ $("resetScore").addEventListener("click", () => {
   streakEl.textContent = "0";
   statusEl.textContent = "Poäng nollställd. Kör en ny intervall!";
   statusEl.className = "";
-});
-
-difficultyEl.addEventListener("change", () => {
-  setCheckboxesFromDifficulty(difficultyEl.value);
-  buildAnswerButtons(getPool());
 });
 
 buildIntervalCheckboxes();
