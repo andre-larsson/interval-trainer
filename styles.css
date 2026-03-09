@@ -61,10 +61,43 @@ button:hover { background: #182347; }
 button:active { transform: scale(0.98); }
 button:disabled { opacity: .5; cursor: not-allowed; }
 
+.interval-picker {
+  margin: 12px 0;
+  padding: 12px;
+  border: 1px solid #2a3563;
+  border-radius: 10px;
+  background: #0f1730;
+}
+
+.interval-picker p {
+  margin: 0 0 8px;
+  color: var(--muted);
+}
+
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
+}
+
+.checkbox-grid label {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.checkbox-grid input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+}
+
 .actions {
   display: flex;
   gap: 10px;
   margin: 8px 0 12px;
+  flex-wrap: wrap;
 }
 
 #newQuestion { background: linear-gradient(180deg, #6179d9, #4f67c8); border: none; }

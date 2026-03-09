@@ -17,7 +17,7 @@ const INTERVALS = [
 const DIFFICULTIES = {
   easy: [0, 3, 4, 5, 7],
   medium: [0, 2, 3, 4, 5, 7, 9, 12],
-  hard: INTERVALS.map(i => i.semitones)
+  hard: INTERVALS.map((i) => i.semitones)
 };
 
 const $ = (id) => document.getElementById(id);
@@ -27,6 +27,8 @@ const playMelodicBtn = $("playMelodic");
 const playHarmonicBtn = $("playHarmonic");
 const scoreEl = $("score");
 const streakEl = $("streak");
+const checkboxContainer = $("intervalCheckboxes");
+const difficultyEl = $("difficulty");
 
 let audioCtx;
 let currentQuestion = null;
@@ -46,14 +48,69 @@ function randomItem(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+function getSelectedSemitones() {
+  const checked = [...document.querySelectorAll('input[name="interval-filter"]:checked')];
+  return checked.map((el) => Number(el.value));
+}
+
 function getPool() {
-  const difficulty = $("difficulty").value;
-  return INTERVALS.filter(i => DIFFICULTIES[difficulty].includes(i.semitones));
+  const selected = getSelectedSemitones();
+  return INTERVALS.filter((i) => selected.includes(i.semitones));
+}
+
+function syncDifficultyToCheckboxes() {
+  const selected = new Set(getSelectedSemitones());
+  const selectedSorted = [...selected].sort((a, b) => a - b);
+
+  for (const [key, arr] of Object.entries(DIFFICULTIES)) {
+    if (arr.length === selectedSorted.length && arr.every((v, idx) => v === selectedSorted[idx])) {
+      difficultyEl.value = key;
+      return;
+    }
+  }
+}
+
+function setCheckboxesFromDifficulty(level) {
+  const allowed = new Set(DIFFICULTIES[level]);
+  document.querySelectorAll('input[name="interval-filter"]').forEach((cb) => {
+    cb.checked = allowed.has(Number(cb.value));
+  });
+}
+
+function buildIntervalCheckboxes() {
+  checkboxContainer.innerHTML = "";
+
+  INTERVALS.forEach((interval) => {
+    const label = document.createElement("label");
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.name = "interval-filter";
+    input.value = interval.semitones;
+    input.addEventListener("change", () => {
+      const selected = getSelectedSemitones();
+      if (selected.length === 0) {
+        input.checked = true;
+        statusEl.innerHTML = '⚠️ <span class="bad">Välj minst ett intervall.</span>';
+        return;
+      }
+      syncDifficultyToCheckboxes();
+      buildAnswerButtons(getPool());
+    });
+
+    const text = document.createElement("span");
+    text.textContent = interval.name;
+
+    label.appendChild(input);
+    label.appendChild(text);
+    checkboxContainer.appendChild(label);
+  });
+
+  setCheckboxesFromDifficulty(difficultyEl.value);
 }
 
 function buildAnswerButtons(pool) {
   answersEl.innerHTML = "";
-  pool.forEach(interval => {
+  pool.forEach((interval) => {
     const btn = document.createElement("button");
     btn.textContent = interval.name;
     btn.onclick = () => answer(interval.semitones);
@@ -100,10 +157,15 @@ function playInterval(question, mode) {
 
 function newQuestion() {
   const pool = getPool();
+  if (!pool.length) {
+    statusEl.innerHTML = '⚠️ <span class="bad">Välj minst ett intervall.</span>';
+    return;
+  }
+
   const picked = randomItem(pool);
   currentQuestion = {
     interval: picked.semitones,
-    root: randomItem([57, 59, 60, 62, 64, 65]) // A3, B3, C4, D4, E4, F4
+    root: randomItem([57, 59, 60, 62, 64, 65])
   };
 
   buildAnswerButtons(pool);
@@ -119,7 +181,7 @@ function answer(guess) {
   if (!currentQuestion) return;
 
   const correct = guess === currentQuestion.interval;
-  const correctName = INTERVALS.find(i => i.semitones === currentQuestion.interval)?.name;
+  const correctName = INTERVALS.find((i) => i.semitones === currentQuestion.interval)?.name;
 
   if (correct) {
     score += 1;
@@ -145,3 +207,11 @@ $("resetScore").addEventListener("click", () => {
   statusEl.textContent = "Poäng nollställd. Kör en ny intervall!";
   statusEl.className = "";
 });
+
+difficultyEl.addEventListener("change", () => {
+  setCheckboxesFromDifficulty(difficultyEl.value);
+  buildAnswerButtons(getPool());
+});
+
+buildIntervalCheckboxes();
+buildAnswerButtons(getPool());
