@@ -43,6 +43,7 @@ let rounds = 0;
 let attempts = 0;
 let firstGuessWrong = false;
 let solved = false;
+let roundCounted = false;
 
 function ensureAudio() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -198,10 +199,10 @@ function startRound() {
     melodicDirection
   };
 
-  rounds += 1;
   attempts = 0;
   firstGuessWrong = false;
   solved = false;
+  roundCounted = false;
 
   buildAnswerButtons(pool);
   clearSelectedAnswer();
@@ -221,6 +222,11 @@ function answer(guess) {
   clearSelectedAnswer();
   const selectedBtn = answersEl.querySelector(`button[data-semitones="${guess}"]`);
   if (selectedBtn) selectedBtn.classList.add("selected-answer");
+
+  if (!roundCounted) {
+    rounds += 1;
+    roundCounted = true;
+  }
 
   attempts += 1;
   const correct = guess === currentQuestion.interval;
