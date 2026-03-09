@@ -195,13 +195,13 @@ function startRound() {
   const directionSetting = directionGameEl.value;
   const melodicDirection = directionSetting === "both" ? randomItem(["up", "down"]) : directionSetting;
 
-  const rootPoolFree = [45, 47, 48, 50, 52, 53, 55, 57, 59, 60, 62, 64, 65, 67, 69, 71, 72];
+  const rootPoolChromatic = Array.from({ length: 25 }, (_, i) => 48 + i); // C3..C5
   const rootPoolC = [48, 60, 72]; // C3, C4, C5
   const rootMode = rootModeGameEl.value;
 
   currentQuestion = {
     interval: picked.semitones,
-    root: randomItem(rootMode === "c" ? rootPoolC : rootPoolFree),
+    root: randomItem(rootMode === "c" ? rootPoolC : rootPoolChromatic),
     melodicDirection
   };
 
