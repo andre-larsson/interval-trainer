@@ -11,15 +11,10 @@
       <section id="setupView">
         <h1>🎵 Intervalltränare</h1>
         <p class="subtitle">Öva gehör med tydliga rundor och fokus på rätt svar.</p>
-        <button id="startGame">Starta spelet</button>
-      </section>
-
-      <section id="gameView" class="hidden">
-        <h1>🎵 Intervalltränare</h1>
 
         <section class="controls">
           <label>
-            Ljud
+            Ljud (inställning)
             <select id="instrument">
               <option value="sine">Ren ton (sine)</option>
               <option value="triangle" selected>Mjuk synth (triangle)</option>
@@ -28,6 +23,12 @@
             </select>
           </label>
         </section>
+
+        <button id="startGame">Starta spelet</button>
+      </section>
+
+      <section id="gameView" class="hidden">
+        <h1>🎵 Intervalltränare</h1>
 
         <section class="interval-picker">
           <p>Välj intervall som ska vara med:</p>
@@ -50,6 +51,7 @@
           <div>Poäng: <span id="score">0</span></div>
           <div>Streak: <span id="streak">0</span></div>
           <button id="resetScore" class="ghost">Nollställ</button>
+          <button id="exitGame" class="ghost">Avsluta</button>
         </section>
       </section>
     </main>

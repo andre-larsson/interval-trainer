@@ -25,6 +25,7 @@ const scoreEl = $("score");
 const streakEl = $("streak");
 const checkboxContainer = $("intervalCheckboxes");
 const nextRoundBtn = $("nextRound");
+const exitGameBtn = $("exitGame");
 
 let audioCtx;
 let currentQuestion = null;
@@ -207,4 +208,9 @@ $("resetScore").addEventListener("click", () => {
   scoreEl.textContent = "0";
   streakEl.textContent = "0";
   statusEl.textContent = "Poäng nollställd.";
+});
+
+exitGameBtn.addEventListener("click", () => {
+  gameView.classList.add("hidden");
+  setupView.classList.remove("hidden");
 });
