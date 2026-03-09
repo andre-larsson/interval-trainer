@@ -12,7 +12,7 @@ const INTERVALS = [
   { semitones: 10, name: "Liten septima" },
   { semitones: 11, name: "Stor septima" },
   { semitones: 12, name: "Oktav" }
-];
+].map((i) => ({ ...i, label: `${i.name} (${i.semitones} st)` }));
 
 const $ = (id) => document.getElementById(id);
 const setupView = $("setupView");
@@ -23,14 +23,18 @@ const playMelodicBtn = $("playMelodic");
 const playHarmonicBtn = $("playHarmonic");
 const scoreEl = $("score");
 const streakEl = $("streak");
+const accuracyEl = $("accuracy");
 const checkboxContainer = $("intervalCheckboxes");
 const nextRoundBtn = $("nextRound");
 const exitGameBtn = $("exitGame");
+const instrumentSetupEl = $("instrument");
+const instrumentGameEl = $("instrumentGame");
 
 let audioCtx;
 let currentQuestion = null;
 let score = 0;
 let streak = 0;
+let rounds = 0;
 let attempts = 0;
 let firstGuessWrong = false;
 let solved = false;
@@ -46,6 +50,16 @@ function midiToFreq(midi) {
 
 function randomItem(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function updateStats() {
+  scoreEl.textContent = score;
+  streakEl.textContent = streak;
+  accuracyEl.textContent = `${score}/${rounds}`;
+}
+
+function syncInstrument(fromEl, toEl) {
+  toEl.value = fromEl.value;
 }
 
 function getSelectedSemitones() {
@@ -79,7 +93,7 @@ function buildIntervalCheckboxes() {
     });
 
     const text = document.createElement("span");
-    text.textContent = interval.name;
+    text.textContent = interval.label;
 
     label.appendChild(input);
     label.appendChild(text);
@@ -91,7 +105,7 @@ function buildAnswerButtons(pool) {
   answersEl.innerHTML = "";
   pool.forEach((interval) => {
     const btn = document.createElement("button");
-    btn.textContent = interval.name;
+    btn.textContent = interval.label;
     btn.onclick = () => answer(interval.semitones);
     answersEl.appendChild(btn);
   });
@@ -119,7 +133,7 @@ function playTone(freq, start, dur, type) {
 function playInterval(question, mode) {
   ensureAudio();
 
-  const type = $("instrument").value;
+  const type = instrumentGameEl.value;
   const now = audioCtx.currentTime + 0.03;
 
   const rootFreq = midiToFreq(question.root);
@@ -147,6 +161,7 @@ function startRound() {
     root: randomItem([57, 59, 60, 62, 64, 65])
   };
 
+  rounds += 1;
   attempts = 0;
   firstGuessWrong = false;
   solved = false;
@@ -158,6 +173,7 @@ function startRound() {
   nextRoundBtn.disabled = true;
   nextRoundBtn.textContent = "Nästa runda (låst tills rätt svar)";
 
+  updateStats();
   playInterval(currentQuestion, "melodic");
 }
 
@@ -166,7 +182,7 @@ function answer(guess) {
 
   attempts += 1;
   const correct = guess === currentQuestion.interval;
-  const correctName = INTERVALS.find((i) => i.semitones === currentQuestion.interval)?.name;
+  const correctLabel = INTERVALS.find((i) => i.semitones === currentQuestion.interval)?.label;
 
   if (correct) {
     solved = true;
@@ -176,10 +192,10 @@ function answer(guess) {
     if (!firstGuessWrong) {
       score += 1;
       streak += 1;
-      statusEl.innerHTML = `✅ <span class="ok">Rätt!</span> ${correctName}. +1 poäng.`;
+      statusEl.innerHTML = `✅ <span class="ok">Rätt!</span> ${correctLabel}. +1 poäng.`;
     } else {
       streak = 0;
-      statusEl.innerHTML = `✅ <span class="ok">Rätt till slut!</span> ${correctName}. 0 poäng denna runda (första gissningen var fel).`;
+      statusEl.innerHTML = `✅ <span class="ok">Rätt till slut!</span> ${correctLabel}. 0 poäng denna runda (första gissningen var fel).`;
     }
   } else {
     if (attempts === 1) firstGuessWrong = true;
@@ -187,31 +203,34 @@ function answer(guess) {
     statusEl.innerHTML = `❌ <span class="bad">Fel.</span> Lyssna igen och försök igen — du behöver rätt svar för att gå vidare.`;
   }
 
-  scoreEl.textContent = score;
-  streakEl.textContent = streak;
+  updateStats();
 }
 
 $("startGame").addEventListener("click", () => {
+  syncInstrument(instrumentSetupEl, instrumentGameEl);
   setupView.classList.add("hidden");
   gameView.classList.remove("hidden");
   startRound();
+});
+
+instrumentSetupEl.addEventListener("change", () => {
+  if (gameView.classList.contains("hidden")) return;
+  syncInstrument(instrumentSetupEl, instrumentGameEl);
+});
+
+instrumentGameEl.addEventListener("change", () => {
+  syncInstrument(instrumentGameEl, instrumentSetupEl);
 });
 
 nextRoundBtn.addEventListener("click", startRound);
 playMelodicBtn.addEventListener("click", () => currentQuestion && playInterval(currentQuestion, "melodic"));
 playHarmonicBtn.addEventListener("click", () => currentQuestion && playInterval(currentQuestion, "harmonic"));
 
-$("resetScore").addEventListener("click", () => {
-  score = 0;
-  streak = 0;
-  scoreEl.textContent = "0";
-  streakEl.textContent = "0";
-  statusEl.textContent = "Poäng nollställd.";
-});
-
 exitGameBtn.addEventListener("click", () => {
   gameView.classList.add("hidden");
   setupView.classList.remove("hidden");
 });
 
+instrumentGameEl.innerHTML = instrumentSetupEl.innerHTML;
 buildIntervalCheckboxes();
+updateStats();

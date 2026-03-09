@@ -35,6 +35,13 @@
       <section id="gameView" class="hidden">
         <h1>🎵 Intervalltränare</h1>
 
+        <section class="controls">
+          <label>
+            Ljud
+            <select id="instrumentGame"></select>
+          </label>
+        </section>
+
         <section class="actions">
           <button id="nextRound">Starta första runda</button>
           <button id="playMelodic" disabled>Spela melodi</button>
@@ -50,12 +57,12 @@
         <section class="scoreboard">
           <div>Poäng: <span id="score">0</span></div>
           <div>Streak: <span id="streak">0</span></div>
-          <button id="resetScore" class="ghost">Nollställ</button>
+          <div>Rätt av rundor: <span id="accuracy">0/0</span></div>
           <button id="exitGame" class="ghost">Avsluta</button>
         </section>
       </section>
     </main>
 
-    <script src="script.js?v=20260310-1"></script>
+    <script src="script.js?v=20260310-2"></script>
   </body>
 </html>
