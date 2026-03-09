@@ -194,7 +194,7 @@ function answer(guess) {
 $("startGame").addEventListener("click", () => {
   setupView.classList.add("hidden");
   gameView.classList.remove("hidden");
-  buildAnswerButtons(getPool());
+  startRound();
 });
 
 nextRoundBtn.addEventListener("click", startRound);
