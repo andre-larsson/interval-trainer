@@ -29,6 +29,8 @@ const nextRoundBtn = $("nextRound");
 const exitGameBtn = $("exitGame");
 const instrumentSetupEl = $("instrument");
 const instrumentGameEl = $("instrumentGame");
+const directionSetupEl = $("directionSetup");
+const directionGameEl = $("directionGame");
 
 const DEFAULT_INTERVALS = new Set([0, 7, 12]); // prim, kvint, oktav
 
@@ -142,8 +144,13 @@ function playInterval(question, mode) {
   const upperFreq = midiToFreq(question.root + question.interval);
 
   if (mode === "melodic") {
-    playTone(rootFreq, now, 0.55, type);
-    playTone(upperFreq, now + 0.72, 0.55, type);
+    if (question.melodicDirection === "down") {
+      playTone(upperFreq, now, 0.55, type);
+      playTone(rootFreq, now + 0.72, 0.55, type);
+    } else {
+      playTone(rootFreq, now, 0.55, type);
+      playTone(upperFreq, now + 0.72, 0.55, type);
+    }
   } else {
     playTone(rootFreq, now, 1.1, type);
     playTone(upperFreq, now, 1.1, type);
@@ -158,9 +165,13 @@ function startRound() {
   }
 
   const picked = randomItem(pool);
+  const directionSetting = directionGameEl.value;
+  const melodicDirection = directionSetting === "both" ? randomItem(["up", "down"]) : directionSetting;
+
   currentQuestion = {
     interval: picked.semitones,
-    root: randomItem([57, 59, 60, 62, 64, 65])
+    root: randomItem([57, 59, 60, 62, 64, 65]),
+    melodicDirection
   };
 
   rounds += 1;
@@ -210,6 +221,7 @@ function answer(guess) {
 
 $("startGame").addEventListener("click", () => {
   syncInstrument(instrumentSetupEl, instrumentGameEl);
+  syncInstrument(directionSetupEl, directionGameEl);
   setupView.classList.add("hidden");
   gameView.classList.remove("hidden");
   startRound();
@@ -224,6 +236,15 @@ instrumentGameEl.addEventListener("change", () => {
   syncInstrument(instrumentGameEl, instrumentSetupEl);
 });
 
+directionSetupEl.addEventListener("change", () => {
+  if (gameView.classList.contains("hidden")) return;
+  syncInstrument(directionSetupEl, directionGameEl);
+});
+
+directionGameEl.addEventListener("change", () => {
+  syncInstrument(directionGameEl, directionSetupEl);
+});
+
 nextRoundBtn.addEventListener("click", startRound);
 playMelodicBtn.addEventListener("click", () => currentQuestion && playInterval(currentQuestion, "melodic"));
 playHarmonicBtn.addEventListener("click", () => currentQuestion && playInterval(currentQuestion, "harmonic"));
@@ -234,5 +255,6 @@ exitGameBtn.addEventListener("click", () => {
 });
 
 instrumentGameEl.innerHTML = instrumentSetupEl.innerHTML;
+syncInstrument(directionSetupEl, directionGameEl);
 buildIntervalCheckboxes();
 updateStats();
