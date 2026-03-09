@@ -31,6 +31,7 @@ const instrumentSetupEl = $("instrument");
 const instrumentGameEl = $("instrumentGame");
 const directionSetupEl = $("directionSetup");
 const directionGameEl = $("directionGame");
+const soundInfoEl = $("soundInfo");
 
 const DEFAULT_INTERVALS = new Set([0, 7, 12]); // prim, kvint, oktav
 
@@ -62,8 +63,14 @@ function updateStats() {
   accuracyEl.textContent = `${score}/${rounds}`;
 }
 
+function updateSoundInfo() {
+  const preset = SOUND_PRESETS[instrumentGameEl.value] || SOUND_PRESETS.triangle;
+  soundInfoEl.textContent = `${preset.info} (attack: ${preset.attack}s, peak: ${preset.peak}, tail: ${preset.tail}s)`;
+}
+
 function syncInstrument(fromEl, toEl) {
   toEl.value = fromEl.value;
+  updateSoundInfo();
 }
 
 function getSelectedSemitones() {
@@ -116,14 +123,14 @@ function buildAnswerButtons(pool) {
 }
 
 const SOUND_PRESETS = {
-  sine: { type: "sine", attack: 0.02, peak: 0.18, tail: 0.03 },
-  triangle: { type: "triangle", attack: 0.02, peak: 0.18, tail: 0.03 },
-  square: { type: "square", attack: 0.01, peak: 0.14, tail: 0.02 },
-  sawtooth: { type: "sawtooth", attack: 0.01, peak: 0.12, tail: 0.02 },
-  flute: { type: "sine", attack: 0.05, peak: 0.2, tail: 0.04 },
-  organ: { type: "square", attack: 0.01, peak: 0.09, tail: 0.04 },
-  bell: { type: "triangle", attack: 0.004, peak: 0.26, tail: 0.18 },
-  warmpad: { type: "triangle", attack: 0.09, peak: 0.16, tail: 0.08 }
+  sine: { type: "sine", attack: 0.02, peak: 0.18, tail: 0.03, info: "Sinusvåg, nästan inga övertoner. Ren referenston." },
+  triangle: { type: "triangle", attack: 0.02, peak: 0.18, tail: 0.03, info: "Triangle-våg. Mjukare än square/saw, bra allround." },
+  square: { type: "square", attack: 0.01, peak: 0.14, tail: 0.02, info: "Square-våg med tydliga övertoner och skarpare klang." },
+  sawtooth: { type: "sawtooth", attack: 0.01, peak: 0.12, tail: 0.02, info: "Sågtand-våg, ljus och övertonsrik." },
+  flute: { type: "sine", attack: 0.05, peak: 0.2, tail: 0.04, info: "Sinusbaserad med lång attack för flöjt-lik känsla." },
+  organ: { type: "square", attack: 0.01, peak: 0.09, tail: 0.04, info: "Square-baserad, jämn sustain och lägre peak." },
+  bell: { type: "triangle", attack: 0.004, peak: 0.26, tail: 0.18, info: "Triangle-baserad med snabb attack + lång utklingning." },
+  warmpad: { type: "triangle", attack: 0.09, peak: 0.16, tail: 0.08, info: "Triangle-baserad pad med lång attack/release." }
 };
 
 function envelope(gainNode, when, dur, attack = 0.02, peak = 0.18) {
@@ -267,6 +274,7 @@ exitGameBtn.addEventListener("click", () => {
 });
 
 instrumentGameEl.innerHTML = instrumentSetupEl.innerHTML;
+syncInstrument(instrumentSetupEl, instrumentGameEl);
 syncInstrument(directionSetupEl, directionGameEl);
 buildIntervalCheckboxes();
 updateStats();

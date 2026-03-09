@@ -15,14 +15,14 @@
           <label>
             Ljud (inställning)
             <select id="instrument">
-              <option value="triangle" selected>Mjuk synth</option>
-              <option value="sine">Ren ton</option>
-              <option value="square">Klar synth</option>
-              <option value="sawtooth">Bright synth</option>
-              <option value="flute">Flöjt</option>
-              <option value="organ">Orgel</option>
-              <option value="bell">Klocka</option>
-              <option value="warmpad">Varm pad</option>
+              <option value="triangle" selected>Mjuk synth — triangle, mjuk attack</option>
+              <option value="sine">Ren ton — sinus, utan övertoner</option>
+              <option value="square">Klar synth — square, tydliga övertoner</option>
+              <option value="sawtooth">Bright synth — sågtand, ljus/aggressiv</option>
+              <option value="flute">Flöjt-lik — sinus, lång attack</option>
+              <option value="organ">Orgel-lik — square, låg peak</option>
+              <option value="bell">Klocka-lik — triangle, snabb attack + lång tail</option>
+              <option value="warmpad">Varm pad — triangle, lång attack/release</option>
             </select>
           </label>
 
@@ -51,6 +51,7 @@
           <label>
             Ljud
             <select id="instrumentGame"></select>
+            <small id="soundInfo" class="muted"></small>
           </label>
 
           <label>
@@ -87,6 +88,6 @@
       </section>
     </main>
 
-    <script src="script.js?v=20260310-6"></script>
+    <script src="script.js?v=20260310-7"></script>
   </body>
 </html>

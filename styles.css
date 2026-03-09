@@ -168,3 +168,4 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 .ghost { background: transparent; }
 .ok { color: var(--ok); }
 .bad { color: var(--bad); }
+.muted { color: var(--muted); font-size: 12px; }
