@@ -9,43 +9,51 @@
   <body>
     <main class="app">
       <section id="setupView">
-        <h1>🎵 Intervalltränare</h1>
+        <h1 id="titleSetup">🎵 Intervalltränare</h1>
 
         <section class="controls">
           <label>
-            Ljud (inställning)
+            <span id="labelLanguageSetup">Språk</span>
+            <select id="languageSetup">
+              <option value="sv" selected>Svenska</option>
+              <option value="en">English</option>
+            </select>
+          </label>
+
+          <label>
+            <span id="labelInstrumentSetup">Ljud (inställning)</span>
             <select id="instrument">
-              <option value="triangle" selected>Mjuk synth — triangle, mjuk attack</option>
-              <option value="sine">Ren ton — sinus, utan övertoner</option>
-              <option value="square">Klar synth — square, tydliga övertoner</option>
-              <option value="sawtooth">Bright synth — sågtand, ljus/aggressiv</option>
-              <option value="flute">Flöjt-lik — sinus, lång attack</option>
-              <option value="organ">Orgel-lik — square, låg peak</option>
-              <option value="bell">Klocka-lik — triangle, snabb attack + lång tail</option>
-              <option value="warmpad">Varm pad — triangle, lång attack/release</option>
+              <option value="triangle" selected></option>
+              <option value="sine"></option>
+              <option value="square"></option>
+              <option value="sawtooth"></option>
+              <option value="flute"></option>
+              <option value="organ"></option>
+              <option value="bell"></option>
+              <option value="warmpad"></option>
             </select>
           </label>
 
           <label>
-            Melodiriktning
+            <span id="labelDirectionSetup">Melodiriktning</span>
             <select id="directionSetup">
-              <option value="up">Uppåt</option>
-              <option value="down">Nedåt</option>
-              <option value="both" selected>Båda (slump)</option>
+              <option value="up"></option>
+              <option value="down"></option>
+              <option value="both" selected></option>
             </select>
           </label>
 
           <label>
-            Grundton
+            <span id="labelRootSetup">Grundton</span>
             <select id="rootModeSetup">
-              <option value="chromatic" selected>Kromatisk (C3–C5)</option>
-              <option value="c">Låst till C</option>
+              <option value="chromatic" selected></option>
+              <option value="c"></option>
             </select>
           </label>
         </section>
 
         <section class="interval-picker">
-          <p>Välj intervall som ska vara med:</p>
+          <p id="intervalPickerText">Välj intervall som ska vara med:</p>
           <div id="intervalCheckboxes" class="checkbox-grid"></div>
         </section>
 
@@ -53,29 +61,37 @@
       </section>
 
       <section id="gameView" class="hidden">
-        <h1>🎵 Intervalltränare</h1>
+        <h1 id="titleGame">🎵 Intervalltränare</h1>
 
         <section class="controls">
           <label>
-            Ljud
+            <span id="labelLanguageGame">Språk</span>
+            <select id="languageGame">
+              <option value="sv" selected>Svenska</option>
+              <option value="en">English</option>
+            </select>
+          </label>
+
+          <label>
+            <span id="labelInstrumentGame">Ljud</span>
             <select id="instrumentGame"></select>
             <small id="soundInfo" class="muted"></small>
           </label>
 
           <label>
-            Melodiriktning
+            <span id="labelDirectionGame">Melodiriktning</span>
             <select id="directionGame">
-              <option value="up">Uppåt</option>
-              <option value="down">Nedåt</option>
-              <option value="both">Båda (slump)</option>
+              <option value="up"></option>
+              <option value="down"></option>
+              <option value="both"></option>
             </select>
           </label>
 
           <label>
-            Grundton
+            <span id="labelRootGame">Grundton</span>
             <select id="rootModeGame">
-              <option value="chromatic">Kromatisk (C3–C5)</option>
-              <option value="c">Låst till C</option>
+              <option value="chromatic"></option>
+              <option value="c"></option>
             </select>
           </label>
         </section>
@@ -96,14 +112,14 @@
         </section>
 
         <section class="scoreboard">
-          <div>Poäng: <span id="score">0</span></div>
-          <div>Streak: <span id="streak">0</span></div>
-          <div>Rätt av rundor: <span id="accuracy">0/0</span></div>
+          <div><span id="scoreLabel">Poäng</span>: <span id="score">0</span></div>
+          <div><span id="streakLabel">Streak</span>: <span id="streak">0</span></div>
+          <div><span id="accuracyLabel">Rätt av rundor</span>: <span id="accuracy">0/0</span></div>
           <button id="exitGame" class="ghost">Avsluta</button>
         </section>
       </section>
     </main>
 
-    <script src="script.js?v=20260310-13"></script>
+    <script src="script.js?v=20260310-14"></script>
   </body>
 </html>
