@@ -8,17 +8,17 @@
   </head>
   <body>
     <main class="app">
+      <div class="app-header">
+        <div class="lang-switch" aria-label="Language switcher">
+          <button id="langSv" class="lang-btn" type="button" title="Svenska">🇸🇪</button>
+          <button id="langEn" class="lang-btn" type="button" title="English">🇬🇧</button>
+        </div>
+      </div>
+
       <section id="setupView">
         <h1 id="titleSetup">🎵 Intervalltränare</h1>
 
         <section class="controls">
-          <label>
-            <span id="labelLanguageSetup">Språk</span>
-            <select id="languageSetup">
-              <option value="sv" selected>Svenska</option>
-              <option value="en">English</option>
-            </select>
-          </label>
 
           <label>
             <span id="labelInstrumentSetup">Ljud (inställning)</span>
@@ -64,14 +64,6 @@
         <h1 id="titleGame">🎵 Intervalltränare</h1>
 
         <section class="controls">
-          <label>
-            <span id="labelLanguageGame">Språk</span>
-            <select id="languageGame">
-              <option value="sv" selected>Svenska</option>
-              <option value="en">English</option>
-            </select>
-          </label>
-
           <label>
             <span id="labelInstrumentGame">Ljud</span>
             <select id="instrumentGame"></select>
@@ -120,6 +112,6 @@
       </section>
     </main>
 
-    <script src="script.js?v=20260310-14"></script>
+    <script src="script.js?v=20260310-15"></script>
   </body>
 </html>

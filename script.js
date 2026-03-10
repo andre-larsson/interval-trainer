@@ -157,8 +157,8 @@ const directionSetupEl = $('directionSetup');
 const directionGameEl = $('directionGame');
 const rootModeSetupEl = $('rootModeSetup');
 const rootModeGameEl = $('rootModeGame');
-const languageSetupEl = $('languageSetup');
-const languageGameEl = $('languageGame');
+const langSvBtn = $('langSv');
+const langEnBtn = $('langEn');
 const soundInfoEl = $('soundInfo');
 
 const DEFAULT_INTERVALS = new Set([0, 7, 12]);
@@ -417,8 +417,6 @@ function applyTranslations() {
 
   $('titleSetup').textContent = t('title');
   $('titleGame').textContent = t('title');
-  $('labelLanguageSetup').textContent = t('language');
-  $('labelLanguageGame').textContent = t('language');
   $('labelInstrumentSetup').textContent = t('setupSound');
   $('labelInstrumentGame').textContent = t('gameSound');
   $('labelDirectionSetup').textContent = t('direction');
@@ -434,6 +432,9 @@ function applyTranslations() {
   $('streakLabel').textContent = t('streak');
   $('accuracyLabel').textContent = t('accuracy');
   exitGameBtn.textContent = t('exit');
+
+  langSvBtn.classList.toggle('active', currentLang === 'sv');
+  langEnBtn.classList.toggle('active', currentLang === 'en');
 
   updateSelectTexts();
   populateSoundOptions();
@@ -489,13 +490,11 @@ rootModeGameEl.addEventListener('change', () => {
 
 function setLanguage(lang) {
   currentLang = lang === 'en' ? 'en' : 'sv';
-  languageSetupEl.value = currentLang;
-  languageGameEl.value = currentLang;
   applyTranslations();
 }
 
-languageSetupEl.addEventListener('change', () => setLanguage(languageSetupEl.value));
-languageGameEl.addEventListener('change', () => setLanguage(languageGameEl.value));
+langSvBtn.addEventListener('click', () => setLanguage('sv'));
+langEnBtn.addEventListener('click', () => setLanguage('en'));
 
 nextRoundBtn.addEventListener('click', startRound);
 playMelodicBtn.addEventListener('click', () => currentQuestion && playInterval(currentQuestion, 'melodic'));

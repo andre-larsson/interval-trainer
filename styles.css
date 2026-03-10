@@ -26,6 +26,31 @@ body {
   border-radius: 16px;
 }
 
+.app-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+.lang-switch {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.lang-btn {
+  min-width: 44px;
+  padding: 8px 10px;
+  font-size: 20px;
+  line-height: 1;
+  border-radius: 10px;
+}
+
+.lang-btn.active {
+  border-color: #ffcf6e;
+  box-shadow: 0 0 0 2px rgba(255, 207, 110, 0.22);
+  background: #1d2a55;
+}
+
 h1 { margin-top: 0; }
 .subtitle { color: var(--muted); margin-top: -8px; }
 .hidden { display: none; }
