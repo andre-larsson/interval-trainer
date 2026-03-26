@@ -1,6 +1,6 @@
 const TRANSLATIONS = {
   sv: {
-    title: '🎵 Intervalltränare',
+    title: 'Intervalltränare',
     language: 'Språk',
     setupSound: 'Ljud (inställning)',
     gameSound: 'Ljud',
@@ -31,7 +31,7 @@ const TRANSLATIONS = {
     semitones: 'st'
   },
   en: {
-    title: '🎵 Interval Trainer',
+    title: 'Interval Trainer',
     language: 'Language',
     setupSound: 'Sound (setup)',
     gameSound: 'Sound',

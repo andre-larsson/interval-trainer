@@ -15,10 +15,13 @@
         </div>
       </div>
 
-      <section id="setupView">
-        <h1 id="titleSetup">🎵 Intervalltränare</h1>
+      <section id="setupView" class="view">
+        <div class="title-block">
+          <p class="eyebrow">Ear Training Ritual</p>
+          <h1 id="titleSetup">Intervalltränare</h1>
+        </div>
 
-        <section class="controls">
+        <section class="controls panel">
 
           <label>
             <span id="labelInstrumentSetup">Ljud (inställning)</span>
@@ -52,18 +55,21 @@
           </label>
         </section>
 
-        <section class="interval-picker">
+        <section class="interval-picker panel">
           <p id="intervalPickerText">Välj intervall som ska vara med:</p>
           <div id="intervalCheckboxes" class="checkbox-grid"></div>
         </section>
 
-        <button id="startGame">Starta spelet</button>
+        <button id="startGame" class="primary-action">Starta spelet</button>
       </section>
 
-      <section id="gameView" class="hidden">
-        <h1 id="titleGame">🎵 Intervalltränare</h1>
+      <section id="gameView" class="view hidden">
+        <div class="title-block">
+          <p class="eyebrow">Pitch Under Pressure</p>
+          <h1 id="titleGame">Intervalltränare</h1>
+        </div>
 
-        <section class="controls">
+        <section class="controls panel">
           <label>
             <span id="labelInstrumentGame">Ljud</span>
             <select id="instrumentGame"></select>
@@ -93,17 +99,17 @@
           <button id="playHarmonic" disabled>Spela harmoni</button>
         </section>
 
-        <section>
+        <section class="panel status-panel">
           <p id="status">Starta en runda för att börja.</p>
         </section>
 
         <section class="answers" id="answers"></section>
 
         <section class="round-cta">
-          <button id="nextRound">Nästa runda</button>
+          <button id="nextRound" class="primary-action">Nästa runda</button>
         </section>
 
-        <section class="scoreboard">
+        <section class="scoreboard panel">
           <div><span id="scoreLabel">Poäng</span>: <span id="score">0</span></div>
           <div><span id="streakLabel">Streak</span>: <span id="streak">0</span></div>
           <div><span id="accuracyLabel">Rätt av rundor</span>: <span id="accuracy">0/0</span></div>
